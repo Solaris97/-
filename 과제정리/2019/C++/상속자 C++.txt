@@ -1,0 +1,36 @@
+#include<iostream>
+#include<string> // string을 사용할때 필요한 header //
+using namespace std;
+
+class Car {
+	int speed = 100;
+	int gear = 3;
+	string color = "RED" ;
+public:
+	void print()
+	{
+		cout << speed << endl;
+	}
+};
+
+
+class Taxi : public Car
+{
+	int meter = 10;
+public:
+	void view()
+	{
+		cout << meter << endl;
+		cout << speed << endl;
+	}
+};
+
+
+
+void main()
+{
+	Car c1;
+	Taxi t1;
+	t1.view();
+	t1.print();
+}

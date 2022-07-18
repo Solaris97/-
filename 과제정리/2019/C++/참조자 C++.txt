@@ -1,0 +1,97 @@
+#include<iostream>
+#include<string> // string을 사용할때 필요한 header //
+using namespace std;
+/*
+ class Car 
+{
+	int& speed; 참조자형태  
+	int *speed; 
+public:
+	 Car() {}  // 참조자는 상수처럼 초기값을 지정해줘야한다 없으면 안됨
+
+	Car(int* s) //
+	{
+		speed = s; 
+		cout << * speed << endl; // speed의 주소가 가르키는 값 즉 10 
+		cout << &speed << endl; // speed의 주소값의 주소(10의 주소의 주소) 
+		cout << speed << endl; // speed의 주소(10의 주소) 
+
+	}
+
+	void view() {
+		cout <<  speed << endl;
+	}
+
+};
+ void main()
+{
+	 int num = 10;
+	 Car c1(&num);
+	 c1.view();
+
+} 
+ */
+ 
+ /*
+class Car
+{
+//	string& alias; string형태는 배열형태로 되어있기 때문에 주소값으로 인한 값을 불러낼 수가 없음 
+	char & ch;
+public:
+	Car(char& c) : ch(c) 
+	{
+		cout << ch << endl;
+	}
+	
+	void view()
+	{
+		cout << ch << endl;
+	}
+
+};
+
+void main()
+{
+	char c = 'c'; 
+	Car c1(c);
+	c1.view();
+}
+*/
+
+class Car
+{
+	int speed;
+	int gear;
+	string color;
+public:
+
+	Car(int s, int g, string c) : speed(s), gear(g), color(c)
+	{
+		cout << "생성자 호출" << endl;
+
+	}
+
+	Car(const Car &obj) : speed(obj.speed), gear(obj.gear), color(obj.color)
+	{
+		cout << "복사 생성자 호출" << endl;
+
+	}
+
+	void view()
+	{
+		cout << speed << endl;
+		cout << gear << endl;
+		cout << color << endl;
+
+
+	}
+};
+
+void main()
+{
+
+	Car c1(100, 3, "RED");
+	Car c2(c1);
+	c1.view();
+	c2.view();
+}

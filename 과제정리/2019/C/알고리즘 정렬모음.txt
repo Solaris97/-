@@ -1,0 +1,298 @@
+#include "stdafx.h"
+
+void display(int arr[]) {		// 현재 상태를 화면에 보여주는 함수
+	int a;
+
+	printf("\n");
+	for (a = 0; a < 10; a++) {
+		printf(" %d ", arr[a]);
+	}
+	printf("\n");
+}
+
+void swap(int arr[], int a, int b) {		// 스왑 함수
+	int temp;
+	temp = arr[a];
+	arr[a] = arr[b];
+	arr[b] = temp;
+}
+
+//// 버블 정렬
+void bubble(int In[], int n) {
+	int a, b;
+
+	for (a = 0; a < n - 1; a++) {
+		for (b = 0; b < n - 1; b++) {
+			if (In[b] > In[b + 1]) {
+				swap(In, b, b + 1);
+			}
+		}
+		display(In);
+	}
+}
+
+//// 선택 정렬
+void selection(int In[], int n) {
+	int a, b;
+	int max;
+
+	for (a = 0; a < n; a++) {
+		max = 0;
+		for (b = 0; b < n - a; b++) {
+			if (In[max] < In[b]) {	// 최대값의 위치를 알려고
+				max = b;
+			}
+		}
+		swap(In, max, b - 1);
+		display(In);
+	}
+}
+
+//// 삽입 정렬
+void insert(int In[], int n) {
+	int a, b;
+
+	for (a = 1; a < n; a++) {
+		for (b = a; b > 0; b--) {
+			if (In[b - 1] > In[b]) {
+				swap(In, b, b - 1);
+			}
+		}
+		display(In);
+	}
+}
+
+void merge(int arr[], int left, int mid, int right) {
+	int temp[10] = { 0, };
+	int index = left;
+	int low = left;
+	int high = mid;
+
+	while ((low < mid) && (high <= right)) {
+		if (arr[low] < arr[high]) {
+			temp[index] = arr[low];
+			low++;
+		}
+		else {
+			temp[index] = arr[high];
+			high++;
+		}
+		index++;
+	}
+
+	if (low < mid) {
+		for (low = low; low < mid; low++, index++) {	// 앞쪽 배열에 남은것 모두 가져오기
+			temp[index] = arr[low];
+		}
+	}
+	if (high <= right) {
+		for (mid = high; mid <= right; mid++, index++) {	// 뒤쪽 배열에 남은것 모두 가져오기
+			temp[index] = arr[mid];
+		}
+	}
+
+	for (index = left; index <= right; index++) {
+		arr[index] = temp[index];
+	}
+	display(arr);
+}
+
+void mergeSort(int In[], int left, int right) {
+	int mid;
+	if (left < right) {
+		mid = (left + right) / 2;
+		//	printf(" (left %d mid %d right %d) ", left, mid, right);
+		mergeSort(In, left, mid);
+		mergeSort(In, mid + 1, right);
+		//	display(In);
+		merge(In, left, mid + 1, right);
+	}
+}
+
+int partition(int arr[], int left, int right) {	//데이터를 분할
+	int pivot = arr[left];
+	int low = left + 1;
+	int high = right;
+
+	while (low <= high) {									//low와 high가 교차할때까지 반복
+		while ((arr[low] <= pivot) && (low <= right)) {	//피벗보다 큰 값이 나올때까지 low++
+			low++;
+		}
+
+		while ((arr[high] >= pivot) && (high >= left + 1)) {	//피벗보다 작은 값이 나올때까지 high--
+			high--;
+		}
+
+		if (low <= high) {	//교차되지 않았다면 두 값을 스왑
+			swap(arr, low, high);
+		}
+	}
+
+	swap(arr, left, high);	//피벗과 high가 가르키는 값 스왑
+
+	display(arr);
+
+	return high; //피벗값 위치 반환
+}
+
+
+void quickSort(int In[10], int left, int right) {		// 퀵 소트 함수
+	int pivot = 0;
+
+	if (left <= right) {
+		pivot = partition(In, left, right);	// 퀵 분할
+		quickSort(In, left, pivot - 1);		// 피벗보다 왼쪽 영역 정렬 
+		quickSort(In, pivot + 1, right);		// 피벗보다 오른쪽 영역 정렬
+	}
+}
+
+int main(void) {
+
+	//	int A[10] = { 1,2,3,4,5,6,7,8,9,10 };
+	//	int A[10] = { 1,3,5,7,9,10,8,6,4,2 };
+	//	int A[10] = { 10,8,6,4,2,1,3,5,7,9 };
+	//	int A[10] = { 2,4,6,8,10,9,7,5,3,1 };
+	// int A[10] = { 9,7,5,3,1,2,4,6,8,10 };
+	//	int A[10] = { 10,9,8,7,6,5,4,3,2,1 };
+	//	int A[10] = { 10,6,1,7,5,2,4,8,3,9 };
+	//	int A[10] = { 2,8,6,3,10,5,9,4,7,1 };
+		int A[10] = { 5,1,8,2,7,10,3,4,9,6 };
+	int In[10] = { 0, };
+	int a;
+
+	for (a = 0; a < 10; a++) { In[a] = A[a]; }
+	printf("\n\n= = = =  버 블 정 렬  = = = = =\n");
+	display(In);
+	bubble(In, 10);
+
+	for (a = 0; a < 10; a++) { In[a] = A[a]; }
+	printf("\n\n= = = =  선 택 정 렬  = = = = =\n");
+	display(In);
+	selection(In, 10);
+
+	for (a = 0; a < 10; a++) { In[a] = A[a]; }
+	printf("\n\n= = = =  삽 입 정 렬  = = = = =\n");
+	display(In);
+	insert(In, 10);
+
+	for (a = 0; a < 10; a++) { In[a] = A[a]; }
+	printf("\n\n= = = =  병 합 정 렬  = = = = =\n");
+	display(In);
+	mergeSort(In, 0, 9);
+
+	for (a = 0; a < 10; a++) { In[a] = A[a]; }
+	printf("\n\n= = = = =  퀵 정 렬  = = = = =\n");
+	display(In);
+	quickSort(In, 0, 9);
+
+	printf("\n\n= = = = =  정 렬 끝  = = = = =\n");
+	return 0;
+}
+
+#include "stdafx.h"
+
+void display(int arr[], int n) {  // 현재 상태를 화면에 보여주는 함수
+	int a;
+
+	printf("\n");
+	for (a = 0; a < n; a++) {
+		printf(" %d ", arr[a]);
+	}
+	printf("\n");
+}
+
+void swap(int arr[], int a, int b) {  // 스왑 함수
+	int temp;
+	temp = arr[a];
+	arr[a] = arr[b];
+	arr[b] = temp;
+}
+
+void heapSort(int In[], int n) {
+	int a, b;
+	int par, chi;
+	int Res[11] = { 0, };
+
+	for (a = 0; a<n; a++) {
+		Res[a + 1] = In[a];
+	}
+
+	for (a = 1; a <= n; a++) { // 힙 구성
+		b = a;
+		while (b>0) {
+			//   printf(" 자 %d 부 %d ", b, (int)(b/2) );
+			par = (int)(b / 2); chi = b;
+			if (Res[(int)(b / 2)] > Res[b]) {
+				swap(Res, par, chi);
+			}
+			b = (int)(b / 2);
+		}
+		//  display(Res, 11);
+	}
+
+	printf("= = =  힙 구 성 결 과  = = = \n");
+	display(Res, 11);
+
+//	for (a = 0; a < n; a++) { // 힙 제거
+		In[a] = Res[a+1]; // 힙 결과 저장
+
+		for (a=0, b = n; b > 0; b--, a++) {
+			In[a] = Res[1]; // 힙 결과 저장
+			Res[1] = Res[b]; // 힙 마지막 데이터를 맨 앞으로
+			Res[b] = 100;
+			par = 1;
+			chi = par * 2;
+			while (chi < b) {   // 힙 재구성
+				display(Res, 11);
+				printf(" (a %d par %d chi %d b %d) ", a, par, chi, b);
+				if (Res[par] > Res[chi]) {
+					if (Res[chi] < Res[chi + 1]) {
+						printf(" left ");
+						swap(Res, par, chi);
+						par = chi;
+					}
+					else {
+						printf(" right ");
+						swap(Res, par, chi + 1);
+						par = chi+1;
+					}
+				}
+				else {
+					break;
+				}
+				chi = par * 2;
+				printf(" [par %d chi %d b %d] ", par, chi, b);
+			}
+			
+			display(Res, 11);
+			
+		}
+		printf("\n");
+		display(Res, 11);
+//	}
+
+}
+
+int main(void) {
+
+	// int A[10] = { 1,2,3,4,5,6,7,8,9,10 };
+	// int A[10] = { 1,3,5,7,9,10,8,6,4,2 };
+	// int A[10] = { 10,8,6,4,2,1,3,5,7,9 };
+	// int A[10] = { 2,4,6,8,10,9,7,5,3,1 };
+	// int A[10] = { 9,7,5,3,1,2,4,6,8,10 };
+	// int A[10] = { 10,9,8,7,6,5,4,3,2,1 };
+	// int A[10] = { 10,6,1,7,5,2,4,8,3,9 };
+	 int A[10] = { 2,8,6,3,10,5,9,4,7,1 };
+	int In[10] = { 0, };
+	int a;
+
+	for (a = 0; a < 10; a++) { In[a] = A[a]; }
+	printf("\n\n= = = = =  힙 정 렬  = = = = =\n");
+	display(In, 10);
+	heapSort(In, 10);
+	
+
+	printf("\n\n= = = = =  정 렬 끝  = = = = =\n");
+	display(In, 10);
+	return 0;
+}
